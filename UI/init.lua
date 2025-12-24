@@ -4,16 +4,26 @@ local UI = {}
 function UI:Create(config)
     print("UI: iniciando")
 
-    local Players = game:GetService("Players")
-    local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
-    local playerGui = player:WaitForChild("PlayerGui")
+    -- Aguarda o jogo carregar (Delta precisa disso)
+    if not game:IsLoaded() then
+        game.Loaded:Wait()
+    end
 
-    print("UI: PlayerGui encontrado")
+    local guiParent
+    if gethui then
+        guiParent = gethui()
+        print("UI: usando gethui()")
+    else
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
+        guiParent = player:WaitForChild("PlayerGui")
+        print("UI: usando PlayerGui")
+    end
 
     local gui = Instance.new("ScreenGui")
     gui.Name = config.ScriptName
     gui.ResetOnSpawn = false
-    gui.Parent = playerGui
+    gui.Parent = guiParent
 
     -- Painel principal
     local main = Instance.new("Frame")
