@@ -2,13 +2,18 @@
 local UI = {}
 
 function UI:Create(config)
+    print("UI: iniciando")
+
     local Players = game:GetService("Players")
-    local player = Players.LocalPlayer
+    local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
+    local playerGui = player:WaitForChild("PlayerGui")
+
+    print("UI: PlayerGui encontrado")
 
     local gui = Instance.new("ScreenGui")
     gui.Name = config.ScriptName
     gui.ResetOnSpawn = false
-    gui.Parent = player:WaitForChild("PlayerGui")
+    gui.Parent = playerGui
 
     -- Painel principal
     local main = Instance.new("Frame")
@@ -34,12 +39,16 @@ function UI:Create(config)
     title.TextSize = 18
     title.Parent = sidebar
 
+    print("UI: painel criado")
+
     -- Toggle
     local Toggle = loadstring(game:HttpGet(
         "https://raw.githubusercontent.com/Bot1zinho/BotiSysteMHub/main/ui/toggle.lua"
     ))()
 
     Toggle:Create(gui, main, config)
+
+    print("UI: toggle criado")
 end
 
 return UI
